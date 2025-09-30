@@ -2,20 +2,17 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { TrendingUp, MessageCircle, Heart, Users, Shield, Music, Smile, Frown, Meh } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+import { MessageCircle, Heart, Users, Music, Smile, Frown, Meh } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import EnhancedMoodAnalytics from "@/components/dashboard/EnhancedMoodAnalytics";
+import AIChatbot from "@/components/dashboard/AIChatbot";
+import UpcomingMeets from "@/components/dashboard/UpcomingMeets";
+import SuggestedCounsellors from "@/components/dashboard/SuggestedCounsellors";
+import PeerGroups from "@/components/dashboard/PeerGroups";
+import WellnessRecommendations from "@/components/dashboard/WellnessRecommendations";
 
 const UserDashboard = () => {
-  const moodData = [
-    { day: "Mon", mood: 7 },
-    { day: "Tue", mood: 6 },
-    { day: "Wed", mood: 8 },
-    { day: "Thu", mood: 7 },
-    { day: "Fri", mood: 9 },
-    { day: "Sat", mood: 8 },
-    { day: "Sun", mood: 7 },
-  ];
-
   const activityData = [
     { activity: "Meditation", count: 12 },
     { activity: "Journaling", count: 8 },
@@ -44,87 +41,96 @@ const UserDashboard = () => {
             <p className="text-muted-foreground text-lg">How are you feeling today?</p>
           </div>
 
-          {/* Mood Check-in */}
-          <Card className="p-6 mb-6 shadow-soft border-border bg-card">
-            <h2 className="text-xl font-semibold mb-4 text-foreground">Quick Mood Check-in</h2>
-            <div className="flex gap-4">
-              <Button className="flex-1 h-20 bg-accent/10 hover:bg-accent/20 text-accent border-accent/20">
-                <Smile className="w-8 h-8 mr-2" />
-                Great
-              </Button>
-              <Button className="flex-1 h-20 bg-peach/10 hover:bg-peach/20 text-peach-foreground border-peach/20">
-                <Meh className="w-8 h-8 mr-2" />
-                Okay
-              </Button>
-              <Button className="flex-1 h-20 bg-secondary/10 hover:bg-secondary/20 text-secondary border-secondary/20">
-                <Frown className="w-8 h-8 mr-2" />
-                Struggling
-              </Button>
-            </div>
-          </Card>
+          <Tabs defaultValue="overview" className="w-full">
+            <TabsList className="grid w-full grid-cols-4 mb-6">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="counsellor">Counsellor</TabsTrigger>
+              <TabsTrigger value="peers">Peer Groups</TabsTrigger>
+              <TabsTrigger value="wellness">Wellness</TabsTrigger>
+            </TabsList>
 
-          {/* Quick Actions */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            {quickActions.map((action, index) => (
-              <motion.div
-                key={index}
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="p-6 shadow-gentle border-border bg-card hover:shadow-soft transition-smooth cursor-pointer">
-                  <div className={`w-12 h-12 rounded-2xl ${action.color} flex items-center justify-center mb-3`}>
-                    <action.icon className="w-6 h-6" />
-                  </div>
-                  <p className="font-medium text-foreground">{action.label}</p>
+            <TabsContent value="overview" className="space-y-6">
+              {/* Mood Check-in */}
+              <Card className="p-6 shadow-soft border-border bg-card">
+                <h2 className="text-xl font-semibold mb-4 text-foreground">Quick Mood Check-in</h2>
+                <div className="flex gap-4">
+                  <Button className="flex-1 h-20 bg-accent/10 hover:bg-accent/20 text-accent border-accent/20">
+                    <Smile className="w-8 h-8 mr-2" />
+                    Great
+                  </Button>
+                  <Button className="flex-1 h-20 bg-peach/10 hover:bg-peach/20 text-peach-foreground border-peach/20">
+                    <Meh className="w-8 h-8 mr-2" />
+                    Okay
+                  </Button>
+                  <Button className="flex-1 h-20 bg-secondary/10 hover:bg-secondary/20 text-secondary border-secondary/20">
+                    <Frown className="w-8 h-8 mr-2" />
+                    Struggling
+                  </Button>
+                </div>
+              </Card>
+
+              {/* Quick Actions */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {quickActions.map((action, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Card className="p-6 shadow-gentle border-border bg-card hover:shadow-soft transition-smooth cursor-pointer">
+                      <div className={`w-12 h-12 rounded-2xl ${action.color} flex items-center justify-center mb-3`}>
+                        <action.icon className="w-6 h-6" />
+                      </div>
+                      <p className="font-medium text-foreground">{action.label}</p>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Enhanced Mood Analytics */}
+              <EnhancedMoodAnalytics />
+
+              {/* Charts */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <AIChatbot />
+
+                <Card className="p-6 shadow-soft border-border bg-card">
+                  <h2 className="text-xl font-semibold mb-4 text-foreground">Wellness Activities</h2>
+                  <ResponsiveContainer width="100%" height={400}>
+                    <BarChart data={activityData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis dataKey="activity" stroke="hsl(var(--muted-foreground))" />
+                      <YAxis stroke="hsl(var(--muted-foreground))" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--card))",
+                          border: "1px solid hsl(var(--border))",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Bar dataKey="count" fill="hsl(var(--secondary))" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </Card>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            </TabsContent>
 
-          {/* Charts */}
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <Card className="p-6 shadow-soft border-border bg-card">
-              <h2 className="text-xl font-semibold mb-4 text-foreground flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-primary" />
-                Weekly Mood Trend
-              </h2>
-              <ResponsiveContainer width="100%" height={250}>
-                <LineChart data={moodData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="day" stroke="hsl(var(--muted-foreground))" />
-                  <YAxis stroke="hsl(var(--muted-foreground))" />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Line type="monotone" dataKey="mood" stroke="hsl(var(--primary))" strokeWidth={3} />
-                </LineChart>
-              </ResponsiveContainer>
-            </Card>
+            <TabsContent value="counsellor" className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <UpcomingMeets />
+                <SuggestedCounsellors />
+              </div>
+            </TabsContent>
 
-            <Card className="p-6 shadow-soft border-border bg-card">
-              <h2 className="text-xl font-semibold mb-4 text-foreground">Wellness Activities</h2>
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={activityData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="activity" stroke="hsl(var(--muted-foreground))" />
-                  <YAxis stroke="hsl(var(--muted-foreground))" />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Bar dataKey="count" fill="hsl(var(--secondary))" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </Card>
-          </div>
+            <TabsContent value="peers" className="space-y-6">
+              <PeerGroups />
+            </TabsContent>
+
+            <TabsContent value="wellness" className="space-y-6">
+              <WellnessRecommendations />
+            </TabsContent>
+          </Tabs>
 
           {/* Recent Activity */}
           <Card className="p-6 shadow-soft border-border bg-card">
