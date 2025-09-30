@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,7 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,8 +24,14 @@ const SignUp = () => {
 
   const handleSubmit = (role: string) => (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(`Signing up as ${role}:`, formData);
-    // Add registration logic here
+    // Navigate to respective dashboard based on role
+    if (role === "user") {
+      navigate("/dashboard/user");
+    } else if (role === "counsellor") {
+      navigate("/dashboard/counsellor");
+    } else if (role === "admin") {
+      navigate("/dashboard/admin");
+    }
   };
 
   return (

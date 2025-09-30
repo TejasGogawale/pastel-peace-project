@@ -14,18 +14,16 @@ const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
 
   const userNavItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard/user" },
-    { icon: TrendingUp, label: "Mood Analytics", path: "/dashboard/user/mood" },
-    { icon: MessageCircle, label: "AI Companion", path: "/dashboard/user/chat" },
+    { icon: TrendingUp, label: "Mood Analytics", path: "/dashboard/user/mood-analytics" },
+    { icon: MessageCircle, label: "AI Companion", path: "/dashboard/user/ai-companion" },
     { icon: Heart, label: "Counsellor", path: "/dashboard/user/counsellor" },
-    { icon: Users, label: "Peer Support", path: "/dashboard/user/peers" },
-    { icon: Shield, label: "Guardian", path: "/dashboard/user/guardian" },
+    { icon: Users, label: "Peer Groups", path: "/dashboard/user/peer-group" },
     { icon: Music, label: "Wellness", path: "/dashboard/user/wellness" },
   ];
 
   const counsellorNavItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard/counsellor" },
     { icon: Users, label: "Patients", path: "/dashboard/counsellor/patients" },
-    { icon: Calendar, label: "Sessions", path: "/dashboard/counsellor/sessions" },
     { icon: TrendingUp, label: "Analytics", path: "/dashboard/counsellor/analytics" },
   ];
 

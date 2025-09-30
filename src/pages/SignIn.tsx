@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,11 +12,18 @@ import { Heart, User, Stethoscope, Shield } from "lucide-react";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (role: string) => (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(`Signing in as ${role}:`, { email, password });
-    // Add authentication logic here
+    // Navigate to respective dashboard based on role
+    if (role === "user") {
+      navigate("/dashboard/user");
+    } else if (role === "counsellor") {
+      navigate("/dashboard/counsellor");
+    } else if (role === "admin") {
+      navigate("/dashboard/admin");
+    }
   };
 
   return (
