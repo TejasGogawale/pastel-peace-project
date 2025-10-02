@@ -3,8 +3,11 @@ import { motion } from "framer-motion";
 import UpcomingMeets from "@/components/dashboard/UpcomingMeets";
 import SuggestedCounsellors from "@/components/dashboard/SuggestedCounsellors";
 import { Heart } from "lucide-react";
+import { useUser } from "@/contexts/UserContext";
 
 const CounsellorSection = () => {
+  const { user } = useUser();
+
   return (
     <DashboardLayout role="user">
       <div className="p-8 gradient-calm min-h-screen">
@@ -18,7 +21,7 @@ const CounsellorSection = () => {
               <Heart className="w-10 h-10 text-primary" />
               Counsellor Support
             </h1>
-            <p className="text-muted-foreground text-lg">Connect with professional counsellors</p>
+            <p className="text-muted-foreground text-lg">Connect with professional counsellors, {user?.name}</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">

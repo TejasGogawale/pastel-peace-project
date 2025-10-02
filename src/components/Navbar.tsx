@@ -19,12 +19,12 @@ const Navbar = () => {
         </Link>
 
         <div className="flex items-center gap-4">
-          <Link to="/signin">
+          <Link to="/auth/signin">
             <Button variant="ghost" className="transition-smooth">
               Sign In
             </Button>
           </Link>
-          <Link to="/signup">
+          <Link to="/auth/signup">
             <Button className="bg-primary hover:bg-primary/90 transition-smooth shadow-gentle">
               Get Started
             </Button>

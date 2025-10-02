@@ -1,10 +1,11 @@
 import DashboardLayout from "@/components/DashboardLayout";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { MessageCircle, Heart, Users, Music, Smile, Frown, Meh } from "lucide-react";
+import { MessageCircle, Heart, Users, Music } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useUser } from "@/contexts/UserContext";
+import MoodCheckIn from "@/components/dashboard/MoodCheckIn";
 import EnhancedMoodAnalytics from "@/components/dashboard/EnhancedMoodAnalytics";
 import AIChatbot from "@/components/dashboard/AIChatbot";
 import UpcomingMeets from "@/components/dashboard/UpcomingMeets";
@@ -13,6 +14,8 @@ import PeerGroups from "@/components/dashboard/PeerGroups";
 import WellnessRecommendations from "@/components/dashboard/WellnessRecommendations";
 
 const UserDashboard = () => {
+  const { user } = useUser();
+  
   const activityData = [
     { activity: "Meditation", count: 12 },
     { activity: "Journaling", count: 8 },
@@ -37,7 +40,7 @@ const UserDashboard = () => {
         >
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-4xl font-bold text-foreground mb-2">Welcome back, Sarah!</h1>
+            <h1 className="text-4xl font-bold text-foreground mb-2">Welcome back, {user?.name || 'there'}!</h1>
             <p className="text-muted-foreground text-lg">How are you feeling today?</p>
           </div>
 
@@ -51,23 +54,7 @@ const UserDashboard = () => {
 
             <TabsContent value="overview" className="space-y-6">
               {/* Mood Check-in */}
-              <Card className="p-6 shadow-soft border-border bg-card">
-                <h2 className="text-xl font-semibold mb-4 text-foreground">Quick Mood Check-in</h2>
-                <div className="flex gap-4">
-                  <Button className="flex-1 h-20 bg-accent/10 hover:bg-accent/20 text-accent border-accent/20">
-                    <Smile className="w-8 h-8 mr-2" />
-                    Great
-                  </Button>
-                  <Button className="flex-1 h-20 bg-peach/10 hover:bg-peach/20 text-peach-foreground border-peach/20">
-                    <Meh className="w-8 h-8 mr-2" />
-                    Okay
-                  </Button>
-                  <Button className="flex-1 h-20 bg-secondary/10 hover:bg-secondary/20 text-secondary border-secondary/20">
-                    <Frown className="w-8 h-8 mr-2" />
-                    Struggling
-                  </Button>
-                </div>
-              </Card>
+              <MoodCheckIn />
 
               {/* Quick Actions */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

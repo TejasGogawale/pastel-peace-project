@@ -79,12 +79,12 @@ const Home = () => {
                 nurtured every step of the way.
               </p>
               <div className="flex gap-4">
-                <Link to="/signup">
+                <Link to="/auth/signup">
                   <Button size="lg" className="bg-primary hover:bg-primary/90 shadow-soft transition-smooth">
                     Start Your Journey
                   </Button>
                 </Link>
-                <Link to="/signin">
+                <Link to="/auth/signin">
                   <Button size="lg" variant="outline" className="transition-smooth">
                     Sign In
                   </Button>
@@ -159,7 +159,7 @@ const Home = () => {
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Join thousands who have found comfort, support, and hope with MindCare
             </p>
-            <Link to="/signup">
+            <Link to="/auth/signup">
               <Button size="lg" className="bg-primary hover:bg-primary/90 shadow-soft transition-smooth">
                 Get Started Today
               </Button>

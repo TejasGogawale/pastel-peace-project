@@ -1,10 +1,12 @@
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import AIChatbot from "@/components/dashboard/AIChatbot";
 import { MessageCircle } from "lucide-react";
+import { useUser } from "@/contexts/UserContext";
 
 const AICompanion = () => {
+  const { user } = useUser();
+
   return (
     <DashboardLayout role="user">
       <div className="p-8 gradient-calm min-h-screen">
@@ -18,7 +20,7 @@ const AICompanion = () => {
               <MessageCircle className="w-10 h-10 text-primary" />
               AI Companion
             </h1>
-            <p className="text-muted-foreground text-lg">Your supportive companion is here to listen</p>
+            <p className="text-muted-foreground text-lg">Hi {user?.name}, your supportive companion is here to listen</p>
           </div>
 
           <AIChatbot />

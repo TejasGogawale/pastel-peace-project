@@ -8,30 +8,32 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 import { Heart, User, Stethoscope, Shield } from "lucide-react";
+import { useUser } from "@/contexts/UserContext";
+import { useToast } from "@/hooks/use-toast";
 
-const SignUp = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+const SignIn = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [selectedRole, setSelectedRole] = useState<'user' | 'counsellor' | 'admin'>('user');
   const navigate = useNavigate();
+  const { login } = useUser();
+  const { toast } = useToast();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (role: string) => (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Navigate to respective dashboard based on role
-    if (role === "user") {
-      navigate("/dashboard/user");
-    } else if (role === "counsellor") {
-      navigate("/dashboard/counsellor");
-    } else if (role === "admin") {
-      navigate("/dashboard/admin");
-    }
+    
+    // Mock authentication - extract name from email
+    const name = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
+    
+    login({ name, email, role: selectedRole });
+    
+    toast({
+      title: "Welcome back!",
+      description: `Signed in successfully as ${selectedRole}`,
+    });
+
+    // Navigate to respective dashboard
+    navigate(`/dashboard/${selectedRole}`);
   };
 
   return (
@@ -49,12 +51,12 @@ const SignUp = () => {
             <div className="inline-flex w-16 h-16 rounded-full bg-primary/10 items-center justify-center mb-4">
               <Heart className="w-8 h-8 text-primary" />
             </div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">Join MindCare</h1>
-            <p className="text-muted-foreground">Begin your journey to better mental wellness</p>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Welcome Back</h1>
+            <p className="text-muted-foreground">We're glad to see you again</p>
           </div>
 
           <Card className="p-8 shadow-soft border-border bg-card">
-            <Tabs defaultValue="user" className="w-full">
+            <Tabs value={selectedRole} onValueChange={(v) => setSelectedRole(v as any)} className="w-full">
               <TabsList className="grid w-full grid-cols-3 mb-6">
                 <TabsTrigger value="user" className="flex items-center gap-2">
                   <User className="w-4 h-4" />
@@ -72,65 +74,35 @@ const SignUp = () => {
 
               {["user", "counsellor", "admin"].map((role) => (
                 <TabsContent key={role} value={role}>
-                  <form onSubmit={handleSubmit(role)} className="space-y-4">
+                  <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor={`${role}-name`}>Full Name</Label>
+                      <Label htmlFor="email">Email</Label>
                       <Input
-                        id={`${role}-name`}
-                        name="name"
-                        type="text"
-                        placeholder="John Doe"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        className="border-input"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor={`${role}-email`}>Email</Label>
-                      <Input
-                        id={`${role}-email`}
-                        name="email"
+                        id="email"
                         type="email"
                         placeholder="your@email.com"
-                        value={formData.email}
-                        onChange={handleChange}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         required
                         className="border-input"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor={`${role}-password`}>Password</Label>
+                      <Label htmlFor="password">Password</Label>
                       <Input
-                        id={`${role}-password`}
-                        name="password"
+                        id="password"
                         type="password"
                         placeholder="••••••••"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                        className="border-input"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor={`${role}-confirm`}>Confirm Password</Label>
-                      <Input
-                        id={`${role}-confirm`}
-                        name="confirmPassword"
-                        type="password"
-                        placeholder="••••••••"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         required
                         className="border-input"
                       />
                     </div>
 
                     <Button type="submit" className="w-full bg-primary hover:bg-primary/90 transition-smooth">
-                      Create Account
+                      Sign In as {role.charAt(0).toUpperCase() + role.slice(1)}
                     </Button>
                   </form>
                 </TabsContent>
@@ -138,9 +110,9 @@ const SignUp = () => {
             </Tabs>
 
             <div className="mt-6 text-center text-sm text-muted-foreground">
-              Already have an account?{" "}
-              <Link to="/signin" className="text-primary hover:underline font-medium">
-                Sign in here
+              Don't have an account?{" "}
+              <Link to="/auth/signup" className="text-primary hover:underline font-medium">
+                Sign up here
               </Link>
             </div>
           </Card>
@@ -150,4 +122,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;

@@ -2,8 +2,11 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { motion } from "framer-motion";
 import PeerGroups from "@/components/dashboard/PeerGroups";
 import { Users } from "lucide-react";
+import { useUser } from "@/contexts/UserContext";
 
 const PeerGroup = () => {
+  const { user } = useUser();
+
   return (
     <DashboardLayout role="user">
       <div className="p-8 gradient-calm min-h-screen">
@@ -17,7 +20,7 @@ const PeerGroup = () => {
               <Users className="w-10 h-10 text-primary" />
               Peer Support Groups
             </h1>
-            <p className="text-muted-foreground text-lg">Connect with people who share your journey</p>
+            <p className="text-muted-foreground text-lg">Connect with people who share your journey, {user?.name}</p>
           </div>
 
           <PeerGroups />
