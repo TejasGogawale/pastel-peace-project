@@ -10,7 +10,6 @@ import EnhancedMoodAnalytics from "@/components/dashboard/EnhancedMoodAnalytics"
 import AIChatbot from "@/components/dashboard/AIChatbot";
 import UpcomingMeets from "@/components/dashboard/UpcomingMeets";
 import SuggestedCounsellors from "@/components/dashboard/SuggestedCounsellors";
-import PeerGroups from "@/components/dashboard/PeerGroups";
 import WellnessRecommendations from "@/components/dashboard/WellnessRecommendations";
 
 const UserDashboard = () => {
@@ -111,7 +110,11 @@ const UserDashboard = () => {
             </TabsContent>
 
             <TabsContent value="peers" className="space-y-6">
-              <PeerGroups />
+              <Card className="p-6 shadow-soft border-border bg-card text-center">
+                <Users className="w-12 h-12 text-primary mx-auto mb-4" />
+                <h2 className="text-xl font-semibold mb-2 text-foreground">Connect with Peers</h2>
+                <p className="text-muted-foreground mb-4">Join hobby-based and mood-based support groups</p>
+              </Card>
             </TabsContent>
 
             <TabsContent value="wellness" className="space-y-6">

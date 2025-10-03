@@ -10,33 +10,33 @@ const Home = () => {
   const features = [
     {
       icon: TrendingUp,
-      title: "Mood Dashboard",
-      description: "Track your emotional wellness journey with beautiful, insightful analytics",
+      title: "Mood Analytics",
+      description: "Track your emotional patterns and wellness trends with beautiful visualizations",
     },
     {
       icon: MessageCircle,
       title: "AI Companion",
-      description: "Chat with our empathetic AI assistant, available 24/7 for support",
-    },
-    {
-      icon: Heart,
-      title: "Counsellor Support",
-      description: "Connect with licensed professionals who truly care about your wellbeing",
+      description: "24/7 supportive AI companion for journaling, reflection, and guidance",
     },
     {
       icon: Users,
-      title: "Peer Connections",
-      description: "Join supportive communities and share experiences in a safe space",
+      title: "Peer Groups",
+      description: "Connect with supportive communities based on shared hobbies and experiences",
+    },
+    {
+      icon: Music,
+      title: "Wellness Space",
+      description: "Meditation, mood-based music playlists, and daily wellness challenges",
+    },
+    {
+      icon: Heart,
+      title: "Professional Counsellors",
+      description: "Connect with licensed professionals who truly care about your wellbeing",
     },
     {
       icon: Shield,
       title: "Guardian Help",
       description: "Keep loved ones informed with consent-based wellness monitoring",
-    },
-    {
-      icon: Music,
-      title: "Wellness Resources",
-      description: "Curated playlists and meditation guides for your peace of mind",
     },
   ];
 

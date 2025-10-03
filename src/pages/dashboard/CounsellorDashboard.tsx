@@ -149,7 +149,7 @@ const CounsellorDashboard = () => {
             </TabsContent>
 
             <TabsContent value="patients" className="space-y-6">
-              <PatientList onSelectPatient={setSelectedPatient} />
+              <PatientList />
             </TabsContent>
 
             <TabsContent value="groups" className="space-y-6">

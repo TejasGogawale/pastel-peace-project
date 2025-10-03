@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Heart, LayoutDashboard, MessageCircle, Users, Shield, Music, TrendingUp, Calendar, Settings, LogOut } from "lucide-react";
+import { Heart, LayoutDashboard, MessageCircle, Users, Shield, Music, TrendingUp, Settings, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface DashboardLayoutProps {
@@ -16,15 +16,17 @@ const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard/user" },
     { icon: TrendingUp, label: "Mood Analytics", path: "/dashboard/user/mood-analytics" },
     { icon: MessageCircle, label: "AI Companion", path: "/dashboard/user/ai-companion" },
-    { icon: Heart, label: "Counsellor", path: "/dashboard/user/counsellor" },
-    { icon: Users, label: "Peer Groups", path: "/dashboard/user/peer-group" },
+    { icon: Heart, label: "Counsellors", path: "/dashboard/user/counsellors" },
+    { icon: Users, label: "Peer Connections", path: "/dashboard/user/peer-connections" },
     { icon: Music, label: "Wellness", path: "/dashboard/user/wellness" },
+    { icon: Shield, label: "Rewards", path: "/dashboard/user/rewards" },
   ];
 
   const counsellorNavItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard/counsellor" },
     { icon: Users, label: "Patients", path: "/dashboard/counsellor/patients" },
     { icon: TrendingUp, label: "Analytics", path: "/dashboard/counsellor/analytics" },
+    { icon: Heart, label: "Groups", path: "/dashboard/counsellor/groups" },
   ];
 
   const adminNavItems = [
