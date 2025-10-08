@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import MindfulWalkingSession from "./wellness/MindfulWalkingSession";
 import BreathingSession from "./wellness/BreathingSession";
-import SmartwatchDashboard from "./wellness/SmartwatchDashboard";
 
 const WellnessRecommendations = () => {
   const [dailyPoints, setDailyPoints] = useState(0);
@@ -240,9 +239,6 @@ const WellnessRecommendations = () => {
           })}
         </div>
       </Card>
-
-      {/* Smartwatch Dashboard */}
-      <SmartwatchDashboard />
 
       {/* Session Modals */}
       <MindfulWalkingSession 

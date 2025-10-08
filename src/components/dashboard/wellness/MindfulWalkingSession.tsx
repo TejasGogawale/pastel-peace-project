@@ -3,7 +3,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
-import { Heart, Activity, Droplets, Navigation, Footprints } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { Heart, Activity, Droplets, Navigation, Footprints, Flame, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface MindfulWalkingSessionProps {
@@ -21,11 +22,15 @@ const MindfulWalkingSession = ({ open, onClose, onComplete }: MindfulWalkingSess
   // Simulated smartwatch metrics
   const [metrics, setMetrics] = useState({
     steps: 0,
+    stepsGoal: 2000,
     heartRate: 72,
     bloodPressure: "120/80",
     o2Level: 98,
     pace: "0:00",
     distance: 0,
+    calories: 0,
+    caloriesGoal: 100,
+    activeMinutes: 0,
   });
 
   useEffect(() => {
@@ -36,11 +41,15 @@ const MindfulWalkingSession = ({ open, onClose, onComplete }: MindfulWalkingSess
         // Simulate metrics changing
         setMetrics((prev) => ({
           steps: prev.steps + Math.floor(Math.random() * 3),
+          stepsGoal: 2000,
           heartRate: 72 + Math.floor(Math.random() * 20),
           bloodPressure: "120/80",
           o2Level: 97 + Math.floor(Math.random() * 3),
           pace: `${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, '0')}`,
           distance: Number((prev.steps * 0.0008).toFixed(2)),
+          calories: Math.floor(prev.steps * 0.04),
+          caloriesGoal: 100,
+          activeMinutes: Math.floor(elapsed / 60),
         }));
       }, 1000);
     }
@@ -71,11 +80,15 @@ const MindfulWalkingSession = ({ open, onClose, onComplete }: MindfulWalkingSess
     setShowCompletion(false);
     setMetrics({
       steps: 0,
+      stepsGoal: 2000,
       heartRate: 72,
       bloodPressure: "120/80",
       o2Level: 98,
       pace: "0:00",
       distance: 0,
+      calories: 0,
+      caloriesGoal: 100,
+      activeMinutes: 0,
     });
   };
 
@@ -109,43 +122,79 @@ const MindfulWalkingSession = ({ open, onClose, onComplete }: MindfulWalkingSess
               )}
             </div>
 
-            {/* Smartwatch Metrics */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              <Card className="p-4 text-center bg-card border-border">
-                <Footprints className="w-6 h-6 text-accent mx-auto mb-2" />
-                <p className="text-2xl font-bold text-foreground">{metrics.steps}</p>
-                <p className="text-sm text-muted-foreground">Steps</p>
-              </Card>
+            {/* Health Metrics Dashboard */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                <Activity className="w-5 h-5 text-primary" />
+                Health Metrics Dashboard
+              </h3>
+              
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {/* Steps */}
+                <Card className="p-4 bg-gradient-to-br from-accent/5 to-primary/5 border-accent/20">
+                  <div className="flex items-center justify-between mb-2">
+                    <Footprints className="w-5 h-5 text-accent" />
+                    <span className="text-2xl font-bold text-foreground">{metrics.steps}</span>
+                  </div>
+                  <Progress value={(metrics.steps / metrics.stepsGoal) * 100} className="h-2 mb-2" />
+                  <p className="text-xs text-muted-foreground">Steps • Goal: {metrics.stepsGoal}</p>
+                </Card>
 
-              <Card className="p-4 text-center bg-card border-border">
-                <Heart className="w-6 h-6 text-peach-foreground mx-auto mb-2" />
-                <p className="text-2xl font-bold text-foreground">{metrics.heartRate}</p>
-                <p className="text-sm text-muted-foreground">Heart Rate (bpm)</p>
-              </Card>
+                {/* Heart Rate */}
+                <Card className="p-4 bg-gradient-to-br from-peach/5 to-highlight/5 border-peach/20">
+                  <div className="flex items-center justify-between mb-2">
+                    <Heart className="w-5 h-5 text-peach-foreground" />
+                    <span className="text-2xl font-bold text-foreground">{metrics.heartRate}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-2">Heart Rate (bpm)</p>
+                </Card>
 
-              <Card className="p-4 text-center bg-card border-border">
-                <Activity className="w-6 h-6 text-primary mx-auto mb-2" />
-                <p className="text-2xl font-bold text-foreground">{metrics.bloodPressure}</p>
-                <p className="text-sm text-muted-foreground">Blood Pressure</p>
-              </Card>
+                {/* Blood Pressure */}
+                <Card className="p-4 bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20">
+                  <div className="flex items-center justify-between mb-2">
+                    <Activity className="w-5 h-5 text-primary" />
+                    <span className="text-2xl font-bold text-foreground">{metrics.bloodPressure}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-2">Blood Pressure</p>
+                </Card>
 
-              <Card className="p-4 text-center bg-card border-border">
-                <Droplets className="w-6 h-6 text-highlight mx-auto mb-2" />
-                <p className="text-2xl font-bold text-foreground">{metrics.o2Level}%</p>
-                <p className="text-sm text-muted-foreground">O2 Level</p>
-              </Card>
+                {/* Oxygen Level */}
+                <Card className="p-4 bg-gradient-to-br from-highlight/5 to-accent/5 border-highlight/20">
+                  <div className="flex items-center justify-between mb-2">
+                    <Droplets className="w-5 h-5 text-highlight" />
+                    <span className="text-2xl font-bold text-foreground">{metrics.o2Level}%</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-2">O2 Level</p>
+                </Card>
 
-              <Card className="p-4 text-center bg-card border-border">
-                <Navigation className="w-6 h-6 text-accent mx-auto mb-2" />
-                <p className="text-2xl font-bold text-foreground">{metrics.pace}</p>
-                <p className="text-sm text-muted-foreground">Pace (min/km)</p>
-              </Card>
+                {/* Calories */}
+                <Card className="p-4 bg-gradient-to-br from-secondary/5 to-primary/5 border-secondary/20">
+                  <div className="flex items-center justify-between mb-2">
+                    <Flame className="w-5 h-5 text-highlight" />
+                    <span className="text-2xl font-bold text-foreground">{metrics.calories}</span>
+                  </div>
+                  <Progress value={(metrics.calories / metrics.caloriesGoal) * 100} className="h-2 mb-2" />
+                  <p className="text-xs text-muted-foreground">Calories • Goal: {metrics.caloriesGoal}</p>
+                </Card>
 
-              <Card className="p-4 text-center bg-card border-border">
-                <Footprints className="w-6 h-6 text-secondary mx-auto mb-2" />
-                <p className="text-2xl font-bold text-foreground">{metrics.distance}</p>
-                <p className="text-sm text-muted-foreground">Distance (km)</p>
-              </Card>
+                {/* Distance & Active Minutes */}
+                <Card className="p-4 bg-gradient-to-br from-accent/5 to-highlight/5 border-accent/20">
+                  <div className="flex items-center gap-2 mb-2">
+                    <TrendingUp className="w-5 h-5 text-accent" />
+                    <span className="font-medium text-foreground">Activity</span>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-muted-foreground">Distance</span>
+                      <span className="font-semibold text-foreground text-sm">{metrics.distance} km</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-muted-foreground">Active</span>
+                      <span className="font-semibold text-foreground text-sm">{metrics.activeMinutes} min</span>
+                    </div>
+                  </div>
+                </Card>
+              </div>
             </div>
           </div>
         ) : (
