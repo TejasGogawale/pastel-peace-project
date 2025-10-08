@@ -1,10 +1,50 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Music, Play, Sparkles, Wind, Heart } from "lucide-react";
+import { Music, Play, Sparkles, Wind, Heart, Trophy } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import MindfulWalkingSession from "./wellness/MindfulWalkingSession";
+import BreathingSession from "./wellness/BreathingSession";
+import SmartwatchDashboard from "./wellness/SmartwatchDashboard";
 
 const WellnessRecommendations = () => {
+  const [dailyPoints, setDailyPoints] = useState(0);
+  const [showWalkingSession, setShowWalkingSession] = useState(false);
+  const [showBreathingSession, setShowBreathingSession] = useState(false);
+  const [completedToday, setCompletedToday] = useState<string[]>([]);
+
+  // Load daily points from localStorage
+  useEffect(() => {
+    const today = new Date().toDateString();
+    const stored = localStorage.getItem("wellness-points");
+    if (stored) {
+      const data = JSON.parse(stored);
+      if (data.date === today) {
+        setDailyPoints(data.points);
+        setCompletedToday(data.completed || []);
+      } else {
+        // Reset for new day
+        localStorage.setItem("wellness-points", JSON.stringify({ date: today, points: 0, completed: [] }));
+      }
+    } else {
+      localStorage.setItem("wellness-points", JSON.stringify({ date: today, points: 0, completed: [] }));
+    }
+  }, []);
+
+  const addPoints = (points: number, activityId: string) => {
+    const today = new Date().toDateString();
+    const newPoints = dailyPoints + points;
+    const newCompleted = [...completedToday, activityId];
+    setDailyPoints(newPoints);
+    setCompletedToday(newCompleted);
+    localStorage.setItem("wellness-points", JSON.stringify({ 
+      date: today, 
+      points: newPoints,
+      completed: newCompleted 
+    }));
+  };
+
   const playlists = [
     { name: "Calm & Focused", mood: "Relaxed", tracks: 32, icon: "🎵" },
     { name: "Morning Energy", mood: "Energetic", tracks: 28, icon: "☀️" },
@@ -29,13 +69,38 @@ const WellnessRecommendations = () => {
   ];
 
   const challenges = [
-    { title: "Gratitude Journaling", duration: "3 min", points: 10 },
-    { title: "Mindful Walking", duration: "10 min", points: 15 },
-    { title: "Deep Breathing Practice", duration: "5 min", points: 12 },
+    { id: "gratitude", title: "Gratitude Journaling", duration: "3 min", points: 10, interactive: false },
+    { id: "walking", title: "Mindful Walking", duration: "10 min", points: 15, interactive: true },
+    { id: "breathing", title: "Deep Breathing Practice", duration: "5 min", points: 12, interactive: true },
   ];
+
+  const handleChallengeClick = (challengeId: string) => {
+    if (completedToday.includes(challengeId)) return;
+    
+    if (challengeId === "walking") {
+      setShowWalkingSession(true);
+    } else if (challengeId === "breathing") {
+      setShowBreathingSession(true);
+    }
+  };
 
   return (
     <div className="space-y-6">
+      {/* Daily Points Display */}
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Card className="p-6 shadow-soft border-border bg-gradient-to-br from-highlight/10 to-accent/10 text-center">
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <Trophy className="w-8 h-8 text-highlight" />
+            <h2 className="text-3xl font-bold text-foreground">{dailyPoints}</h2>
+          </div>
+          <p className="text-muted-foreground">Wellness Points Today</p>
+        </Card>
+      </motion.div>
+
       {/* Daily Affirmation */}
       <motion.div
         initial={{ y: -20, opacity: 0 }}
@@ -138,22 +203,58 @@ const WellnessRecommendations = () => {
           Micro Wellness Challenges
         </h2>
         <div className="grid md:grid-cols-3 gap-4">
-          {challenges.map((challenge, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: idx * 0.1 }}
-              className="p-4 rounded-lg bg-muted/50 text-center hover:bg-muted transition-smooth"
-            >
-              <h3 className="font-semibold text-foreground mb-2">{challenge.title}</h3>
-              <p className="text-sm text-muted-foreground mb-3">{challenge.duration}</p>
-              <Badge variant="secondary" className="mb-3">+{challenge.points} points</Badge>
-              <Button size="sm" className="w-full">Start Challenge</Button>
-            </motion.div>
-          ))}
+          {challenges.map((challenge, idx) => {
+            const isCompleted = completedToday.includes(challenge.id);
+            return (
+              <motion.div
+                key={idx}
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: idx * 0.1 }}
+                className={`p-4 rounded-lg text-center transition-smooth ${
+                  isCompleted 
+                    ? "bg-accent/10 border-2 border-accent/30" 
+                    : "bg-muted/50 hover:bg-muted cursor-pointer"
+                }`}
+                onClick={() => challenge.interactive && !isCompleted && handleChallengeClick(challenge.id)}
+              >
+                <h3 className="font-semibold text-foreground mb-2">{challenge.title}</h3>
+                <p className="text-sm text-muted-foreground mb-3">{challenge.duration}</p>
+                {isCompleted ? (
+                  <Badge variant="secondary" className="mb-3 bg-accent/20 text-accent-foreground">
+                    ✨ Completed
+                  </Badge>
+                ) : (
+                  <Badge variant="secondary" className="mb-3">+{challenge.points} points</Badge>
+                )}
+                <Button 
+                  size="sm" 
+                  className="w-full" 
+                  disabled={isCompleted}
+                  variant={isCompleted ? "outline" : "default"}
+                >
+                  {isCompleted ? "Done Today" : "Start Challenge"}
+                </Button>
+              </motion.div>
+            );
+          })}
         </div>
       </Card>
+
+      {/* Smartwatch Dashboard */}
+      <SmartwatchDashboard />
+
+      {/* Session Modals */}
+      <MindfulWalkingSession 
+        open={showWalkingSession}
+        onClose={() => setShowWalkingSession(false)}
+        onComplete={(points) => addPoints(points, "walking")}
+      />
+      <BreathingSession 
+        open={showBreathingSession}
+        onClose={() => setShowBreathingSession(false)}
+        onComplete={(points) => addPoints(points, "breathing")}
+      />
     </div>
   );
 };
